@@ -1,4 +1,4 @@
-package com.jgm.proyectoparqueounicda.ui.theme.views
+package com.jgm.proyectoparqueounicda.ui.views.login
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

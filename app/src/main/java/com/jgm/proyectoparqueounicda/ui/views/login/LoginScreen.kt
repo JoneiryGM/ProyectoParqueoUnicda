@@ -1,4 +1,4 @@
-package com.jgm.proyectoparqueounicda.ui.theme.views
+package com.jgm.proyectoparqueounicda.ui.views.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

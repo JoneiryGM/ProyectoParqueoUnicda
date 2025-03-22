@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
 }
 
@@ -30,18 +28,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
 
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -52,11 +55,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.runtime.livedata)
-    kapt(libs.androidx.room.compiler)
     implementation(libs.gson)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

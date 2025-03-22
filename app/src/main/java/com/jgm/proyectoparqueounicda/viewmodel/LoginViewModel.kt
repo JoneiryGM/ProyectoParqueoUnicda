@@ -1,5 +1,4 @@
 package com.jgm.proyectoparqueounicda.viewmodel
 
-
-class HomeViewModel {
+class LoginViewModel {
 }
