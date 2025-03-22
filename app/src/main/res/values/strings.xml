@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ProyectoParqueoUnicda</string>
+    <!--Login-->
+    <string name="text_user_input">Ingrese usuario...</string>
+    <string name="text_user">Usuario </string>
+    <string name="text_password">Contraseña</string>
+    <string name="text_input_password">Ingrese contraseña...</string>
+    <string name="text_access">INGRESAR</string>
 </resources>
