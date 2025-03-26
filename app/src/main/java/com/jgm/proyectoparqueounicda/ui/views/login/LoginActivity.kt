@@ -7,18 +7,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.jgm.proyectoparqueounicda.ui.theme.ProyectoParqueoUnicdaTheme
+import com.jgm.proyectoparqueounicda.ui.theme.ThemeApp
 
+class LoginActivity : ComponentActivity() {
 
-class LoginActivity:ComponentActivity() {
+    //TODO INSTANCIAR EL VIEW MODEL AQUI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { ProyectoParqueoUnicdaTheme {
-            Surface(
-                modifier = Modifier.fillMaxSize(), color = Color.White
-            ) { LoginScreen() }
-        } }
+        setContent {
+            ThemeApp {
+                Surface(
+                    modifier = Modifier.fillMaxSize(), color = Color.White
+                ) {
+                    //TODO PASR EL VIEW_MODEL COMO PRAMETRO A LA FUNCION COMPOSABLE
+                    LoginScreen()
+                }
+            }
+        }
     }
 
 }

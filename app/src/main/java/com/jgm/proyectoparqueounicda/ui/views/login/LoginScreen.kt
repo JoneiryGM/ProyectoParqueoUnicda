@@ -42,6 +42,9 @@ import com.jgm.proyectoparqueounicda.ui.theme.tertiaryColor
 
 @Composable
 fun LoginScreen() {
+    //TODO INVOCAR OBJECTO DEL VIEW_MODEL AQUI
+
+
     val userValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -112,6 +115,13 @@ fun LoginScreen() {
 
                 Button(
                     onClick = {
+                        //TODO REALIZAR VALIDACIONES CAMPOS VACIOS
+
+
+                        //TODO LLAMAR FUNCION VIEW_MODEL AQUI
+
+
+                        //TODO EVALUAR SI EL USUARIO EXISTE, SI EXISTE PASAR INTENTS CON EL TIPO DE ROL DEL USUARIO A HOME_SCREEN
 
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = tertiaryColor),
