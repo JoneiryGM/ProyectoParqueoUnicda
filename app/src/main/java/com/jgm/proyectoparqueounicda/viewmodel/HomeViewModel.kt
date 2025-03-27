@@ -31,4 +31,11 @@ class HomeViewModel(private val repository: FirestoreRepository) : ViewModel() {
         }
     }
 
+    fun adjustParkingSlot(qty: Int){
+        Log.d("HomeViewModel", "calling adjustParkingSlot")
+        viewModelScope.launch {
+            repository.adjustParkingIndex(qty)
+        }
+    }
+
 }

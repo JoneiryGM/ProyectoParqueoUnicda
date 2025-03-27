@@ -1,6 +1,8 @@
 package com.jgm.proyectoparqueounicda.model.repository
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.jgm.proyectoparqueounicda.model.businees.LoginRequest
 import com.jgm.proyectoparqueounicda.model.businees.Parking
 import com.jgm.proyectoparqueounicda.model.businees.ParkingConfig
@@ -36,14 +38,15 @@ class FirestoreRepository {
 
     //Obtiene el indice actual de los parqueos en settings_collect
     fun getIndexParkings(): Flow<ParkingConfig> = callbackFlow {
-        val listener = settingsCollection.document(Constants.SETTINGS_DOCUMENT_PARKING).addSnapshotListener { snapshot, error ->
-            if (error != null) {
-                close(error)
-                return@addSnapshotListener
+        val listener = settingsCollection.document(Constants.SETTINGS_DOCUMENT_PARKING)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val parkingConfig = snapshot?.toObject(ParkingConfig::class.java)
+                parkingConfig?.let { trySend(it) }
             }
-            val parkingConfig = snapshot?.toObject(ParkingConfig::class.java)
-            parkingConfig?.let { trySend(it) }
-        }
         awaitClose { listener.remove() }
     }
 
@@ -68,6 +71,32 @@ class FirestoreRepository {
     //Actualiza en la colecion de settings_collect el paremtro para ajustar la cantidad de parqueos
     suspend fun updateSettingsParking(parkingConfig: ParkingConfig) {
         settingsCollection.document(Constants.SETTINGS_DOCUMENT_PARKING).set(parkingConfig).await()
+    }
+
+    //Metodo para inicializar la lista de los parqueos y actualizarla dinamicamente segun cantidad de parqueos
+    suspend fun adjustParkingIndex(qty: Int) {
+        try {
+            val currentParking =
+                parkingCollection.orderBy("index", Query.Direction.DESCENDING).get().await()
+            val currentCount = currentParking.size()
+
+            val differenceValue = qty - currentCount
+
+            if (differenceValue > 0) {
+                var lastIndex = if (currentParking.isEmpty) 0 else currentParking.documents.first()
+                    .getLong("index") ?: 0
+                firestore.batch()
+                for (i in 1..differenceValue) {
+                    lastIndex++
+                    val docRef = parkingCollection.document()
+                    val newParking =
+                        Parking(id = docRef.id, index = lastIndex.toInt(), isAvailable = true)
+                    docRef.set(newParking).await()
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("FirestoreRepository", "Error in adjustParkingIndex ${e.localizedMessage}")
+        }
     }
 
 }

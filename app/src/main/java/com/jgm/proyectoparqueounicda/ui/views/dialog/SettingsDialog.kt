@@ -129,6 +129,7 @@ fun SettingsDialog(onDismiss: () -> Unit, homeViewModel: HomeViewModel) {
                                 )
                             )
                         }
+                        homeViewModel.adjustParkingSlot(qty = qtyValue.value.toIntOrNull() ?: 0)
                         Toast.makeText(
                             context, "Actualización realizada exitosamente!", Toast.LENGTH_SHORT
                         ).show()
