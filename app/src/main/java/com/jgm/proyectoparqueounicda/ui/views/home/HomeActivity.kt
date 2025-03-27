@@ -1,5 +1,6 @@
 package com.jgm.proyectoparqueounicda.ui.views.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,6 +26,8 @@ import com.jgm.proyectoparqueounicda.R
 import com.jgm.proyectoparqueounicda.ui.theme.ThemeApp
 import com.jgm.proyectoparqueounicda.ui.theme.primaryColor
 import com.jgm.proyectoparqueounicda.ui.views.dialog.SettingsDialog
+import com.jgm.proyectoparqueounicda.ui.views.dialog.SignOff
+import com.jgm.proyectoparqueounicda.ui.views.login.LoginActivity
 import com.jgm.proyectoparqueounicda.viewmodel.HomeViewModel
 import org.koin.android.ext.android.inject
 
@@ -38,6 +41,7 @@ class HomeActivity : ComponentActivity() {
         setContent {
             val rol = intent.getStringExtra("rol")
             var showSettingsDialog by remember { mutableStateOf(false) }
+            var showSignoffDialog by remember { mutableStateOf(false) }
             ThemeApp {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     var topBarTitle by remember { mutableStateOf("INICIO") }
@@ -48,7 +52,15 @@ class HomeActivity : ComponentActivity() {
                                 containerColor = primaryColor,
                                 titleContentColor = Color.White,
                             ), title = { Text(topBarTitle) }, actions = {
-                                //TODO PONER BOTON DE CERRAR SESION AQUI DEBAJO DE ESTE
+                                IconButton(onClick = {
+                                    showSignoffDialog = true
+                                }) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_logout_24),
+                                        contentDescription = null,
+                                        tint = Color.White
+                                    )
+                                }
                                 if (rol.equals("admin")) {
                                     IconButton(onClick = {
                                         showSettingsDialog = true
@@ -75,6 +87,14 @@ class HomeActivity : ComponentActivity() {
                     onDismiss = { showSettingsDialog = false }, homeViewModel = homeViewModel
                 )
             }
+            if (showSignoffDialog) {
+                SignOff(onDismissRequest = { showSignoffDialog = false }, onConfirmSignOff = {
+                    val intent = Intent(this@HomeActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                })
+            }
         }
     }
+
+
 }
