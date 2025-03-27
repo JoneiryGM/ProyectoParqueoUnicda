@@ -30,6 +30,7 @@ class HomeActivity:ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val rol = intent.getStringExtra("rol")
             ThemeApp {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     var topBarTitle by remember { mutableStateOf("INICIO") }
@@ -49,7 +50,7 @@ class HomeActivity:ComponentActivity() {
                     }, bottomBar = {
                     }, ) { paddingValues ->
                         Box(modifier = Modifier.padding(paddingValues)) {
-                            HomeScreen()
+                            HomeScreen(rol)
                         }
                     }
                 }

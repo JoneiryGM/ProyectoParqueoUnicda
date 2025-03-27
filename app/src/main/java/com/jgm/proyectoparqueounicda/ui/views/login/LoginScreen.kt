@@ -1,5 +1,6 @@
 package com.jgm.proyectoparqueounicda.ui.views.login
 
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -45,6 +46,7 @@ import com.jgm.proyectoparqueounicda.model.businees.LoginRequest
 import com.jgm.proyectoparqueounicda.model.businees.LoginState
 import com.jgm.proyectoparqueounicda.ui.theme.primaryColor
 import com.jgm.proyectoparqueounicda.ui.theme.tertiaryColor
+import com.jgm.proyectoparqueounicda.ui.views.home.HomeActivity
 import com.jgm.proyectoparqueounicda.viewmodel.LoginViewModel
 
 @Composable
@@ -123,7 +125,6 @@ fun LoginScreen(loginViewModel: LoginViewModel) {
 
                 Button(
                     onClick = {
-                        //TODO REALIZAR VALIDACIONES CAMPOS VACIOS
                         if (userValue.value.isEmpty() || passwordValue.value.isEmpty()) {
                             Toast.makeText(context, "Debe validar datos", Toast.LENGTH_SHORT).show()
                         } else {
@@ -134,8 +135,6 @@ fun LoginScreen(loginViewModel: LoginViewModel) {
                                 )
                             )
                         }
-
-                        //TODO EVALUAR SI EL USUARIO EXISTE, SI EXISTE PASAR INTENTS CON EL TIPO DE ROL DEL USUARIO A HOME_SCREEN
 
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = tertiaryColor),
@@ -149,10 +148,9 @@ fun LoginScreen(loginViewModel: LoginViewModel) {
                 when (loginState) {
                     is LoginState.Loading -> "Cargando"
                     is LoginState.Success -> {
-                        //TODO EVALUAR SI EL USUARIO EXISTE, SI EXISTE PASAR INTENTS CON EL TIPO DE ROL DEL USUARIO A HOME_SCREEN
-                        //val intent = Intent(context, HomeActivity::class.java)
-                        // context.startActivity(intent)
-                        Log.d("user",user.toString())
+                        val intent = Intent(context, HomeActivity::class.java)
+                        intent.putExtra("rol",user?.role)
+                        context.startActivity(intent)
                         Toast.makeText(context, "Usuario autenticado", Toast.LENGTH_SHORT)
                             .show()
                     }

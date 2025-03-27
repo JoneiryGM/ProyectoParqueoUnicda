@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(){
+fun HomeScreen(rol: String?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -22,7 +22,7 @@ fun HomeScreen(){
     )
     {
         Text(
-            text = "Soy el menu principal}",
+            text = "Soy el menu principal $rol",
             color = Color.Black,
             modifier = Modifier.padding(top = 26.dp)
         )
