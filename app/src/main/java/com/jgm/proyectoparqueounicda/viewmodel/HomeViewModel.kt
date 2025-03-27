@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-
 class HomeViewModel(private val repository: FirestoreRepository) : ViewModel() {
 
     private val _currentQtyParking = MutableStateFlow<ParkingConfig?>(null)
@@ -41,6 +40,13 @@ class HomeViewModel(private val repository: FirestoreRepository) : ViewModel() {
         Log.d("HomeViewModel", "calling updateConfigParking")
         viewModelScope.launch {
             repository.updateSettingsParking(parkingConfig)
+        }
+    }
+
+    fun updateParking(parking: Parking) {
+        Log.d("HomeViewModel", "calling updateParking")
+        viewModelScope.launch {
+            repository.updateParkingAvailability(parking)
         }
     }
 

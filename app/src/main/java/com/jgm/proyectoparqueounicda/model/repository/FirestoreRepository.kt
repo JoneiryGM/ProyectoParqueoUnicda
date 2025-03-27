@@ -73,6 +73,11 @@ class FirestoreRepository {
         settingsCollection.document(Constants.SETTINGS_DOCUMENT_PARKING).set(parkingConfig).await()
     }
 
+    //Actualizar disponibilidad de los parqueos
+    suspend fun updateParkingAvailability(parking: Parking){
+        parkingCollection.document(parking.id).set(parking).await()
+    }
+
     //Metodo para inicializar la lista de los parqueos y actualizarla dinamicamente segun cantidad de parqueos
     suspend fun adjustParkingIndex(qty: Int) {
         try {

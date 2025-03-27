@@ -20,6 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +38,7 @@ import com.jgm.proyectoparqueounicda.R
 import com.jgm.proyectoparqueounicda.model.businees.Parking
 import com.jgm.proyectoparqueounicda.ui.theme.greenColor
 import com.jgm.proyectoparqueounicda.ui.theme.primaryColor
+import com.jgm.proyectoparqueounicda.ui.views.dialog.UpdateParkingDialog
 import com.jgm.proyectoparqueounicda.viewmodel.HomeViewModel
 
 @Composable
@@ -62,7 +67,7 @@ fun HomeScreen(rol: String?, homeViewModel: HomeViewModel) {
         ) {
             parking.value.sortedBy { it.index }.stream().forEach { parking ->
                 item(parking.index) {
-                    ParkingItem(rol = rol, parking)
+                    ParkingItem(rol = rol, homeViewModel, parking)
                 }
             }
         }
@@ -71,15 +76,16 @@ fun HomeScreen(rol: String?, homeViewModel: HomeViewModel) {
 
 
 @Composable
-fun ParkingItem(rol: String?, parking: Parking) {
+fun ParkingItem(rol: String?, homeViewModel: HomeViewModel, parking: Parking) {
     LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .padding(8.dp)
             .size(100.dp)
             .clickable {
                 if (rol.equals("admin")) {
-                    //TODO CLICK SHOW DIALOG UPDATE PARKING SLOT
+                    showDialog = true
                 }
             }
             .background(
@@ -90,7 +96,7 @@ fun ParkingItem(rol: String?, parking: Parking) {
         IconButton(
             onClick = {
                 if (rol.equals("admin")) {
-                    //TODO CLICK SHOW DIALOG UPDATE PARKING SLOT
+                    showDialog = true
                 }
             }, modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
@@ -108,6 +114,11 @@ fun ParkingItem(rol: String?, parking: Parking) {
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge,
             fontSize = 20.sp
+        )
+    }
+    if (showDialog) {
+        UpdateParkingDialog(
+            onDismiss = { showDialog = false }, homeViewModel = homeViewModel, parking = parking
         )
     }
 }
