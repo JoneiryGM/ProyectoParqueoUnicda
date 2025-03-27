@@ -1,6 +1,5 @@
 package com.jgm.proyectoparqueounicda.ui.views.login
 
-import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -43,15 +42,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jgm.proyectoparqueounicda.R
 import com.jgm.proyectoparqueounicda.model.businees.LoginRequest
+import com.jgm.proyectoparqueounicda.model.businees.LoginState
 import com.jgm.proyectoparqueounicda.ui.theme.primaryColor
 import com.jgm.proyectoparqueounicda.ui.theme.tertiaryColor
-import com.jgm.proyectoparqueounicda.ui.views.home.HomeActivity
 import com.jgm.proyectoparqueounicda.viewmodel.LoginViewModel
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel) {
 
     val user by loginViewModel.user.collectAsState()
+    val loginState by loginViewModel.loginState.collectAsState()
     val userValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -124,17 +124,16 @@ fun LoginScreen(loginViewModel: LoginViewModel) {
                 Button(
                     onClick = {
                         //TODO REALIZAR VALIDACIONES CAMPOS VACIOS
-                        if (userValue.value.isEmpty() || passwordValue.value.isEmpty()){
-                            Toast.makeText(context,"Debe validar datos",Toast.LENGTH_SHORT).show()
-                        }else{
-                            loginViewModel.doLogin(LoginRequest(userValue.value, passwordValue.value))
-                            Log.d("validando data del usuario: " , user.toString())
+                        if (userValue.value.isEmpty() || passwordValue.value.isEmpty()) {
+                            Toast.makeText(context, "Debe validar datos", Toast.LENGTH_SHORT).show()
+                        } else {
+                            loginViewModel.doLogin(
+                                LoginRequest(
+                                    userValue.value,
+                                    passwordValue.value
+                                )
+                            )
                         }
-                        //val intent = Intent(context, HomeActivity::class.java)
-                       // context.startActivity(intent)
-
-                        //TODO LLAMAR FUNCION VIEW_MODEL AQUI
-
 
                         //TODO EVALUAR SI EL USUARIO EXISTE, SI EXISTE PASAR INTENTS CON EL TIPO DE ROL DEL USUARIO A HOME_SCREEN
 
@@ -147,7 +146,23 @@ fun LoginScreen(loginViewModel: LoginViewModel) {
                     )
                 }
 
+                when (loginState) {
+                    is LoginState.Loading -> "Cargando"
+                    is LoginState.Success -> {
+                        //TODO EVALUAR SI EL USUARIO EXISTE, SI EXISTE PASAR INTENTS CON EL TIPO DE ROL DEL USUARIO A HOME_SCREEN
+                        //val intent = Intent(context, HomeActivity::class.java)
+                        // context.startActivity(intent)
+                        Log.d("user",user.toString())
+                        Toast.makeText(context, "Usuario autenticado", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    is LoginState.Error -> {
+                        val errorMessage = (loginState as LoginState.Error).message
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
 
+                    else -> {}
+                }
             }
         }
     }
