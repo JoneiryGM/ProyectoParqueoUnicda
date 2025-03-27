@@ -1,5 +1,8 @@
 package com.jgm.proyectoparqueounicda.ui.views.login
 
+import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +24,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,16 +42,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jgm.proyectoparqueounicda.R
+import com.jgm.proyectoparqueounicda.model.businees.LoginRequest
 import com.jgm.proyectoparqueounicda.ui.theme.primaryColor
 import com.jgm.proyectoparqueounicda.ui.theme.tertiaryColor
+import com.jgm.proyectoparqueounicda.ui.views.home.HomeActivity
+import com.jgm.proyectoparqueounicda.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen() {
-    //TODO INVOCAR OBJECTO DEL VIEW_MODEL AQUI
+fun LoginScreen(loginViewModel: LoginViewModel) {
 
-
+    val user by loginViewModel.user.collectAsState()
     val userValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
+    val context = LocalContext.current
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(snackbarHost = {
@@ -116,7 +124,14 @@ fun LoginScreen() {
                 Button(
                     onClick = {
                         //TODO REALIZAR VALIDACIONES CAMPOS VACIOS
-
+                        if (userValue.value.isEmpty() || passwordValue.value.isEmpty()){
+                            Toast.makeText(context,"Debe validar datos",Toast.LENGTH_SHORT).show()
+                        }else{
+                            loginViewModel.doLogin(LoginRequest(userValue.value, passwordValue.value))
+                            Log.d("validando data del usuario: " , user.toString())
+                        }
+                        //val intent = Intent(context, HomeActivity::class.java)
+                       // context.startActivity(intent)
 
                         //TODO LLAMAR FUNCION VIEW_MODEL AQUI
 
