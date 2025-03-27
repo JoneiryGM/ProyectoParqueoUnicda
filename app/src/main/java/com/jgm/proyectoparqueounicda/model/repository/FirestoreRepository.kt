@@ -23,7 +23,7 @@ class FirestoreRepository {
 
 
     //Lista todos los parqueos en la colecion de parking_collect
-    fun getParkings(): Flow<List<Parking>> = callbackFlow {
+    fun getParking(): Flow<List<Parking>> = callbackFlow {
         val listener = parkingCollection.addSnapshotListener { snapshot, error ->
             if (error != null) {
                 close(error)
@@ -37,7 +37,7 @@ class FirestoreRepository {
     }
 
     //Obtiene el indice actual de los parqueos en settings_collect
-    fun getIndexParkings(): Flow<ParkingConfig> = callbackFlow {
+    fun getIndexParking(): Flow<ParkingConfig> = callbackFlow {
         val listener = settingsCollection.document(Constants.SETTINGS_DOCUMENT_PARKING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
