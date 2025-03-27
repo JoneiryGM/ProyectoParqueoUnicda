@@ -10,9 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.jgm.proyectoparqueounicda.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen(rol: String?) {
+fun HomeScreen(rol: String?, homeViewModel: HomeViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()

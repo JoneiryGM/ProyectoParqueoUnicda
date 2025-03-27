@@ -35,16 +35,14 @@ class FirestoreRepository {
     }
 
     //Obtiene el indice actual de los parqueos en settings_collect
-    fun getIndexParkings(): Flow<Int?> = callbackFlow {
-        val listener = settingsCollection.addSnapshotListener { snapshot, error ->
+    fun getIndexParkings(): Flow<ParkingConfig> = callbackFlow {
+        val listener = settingsCollection.document(Constants.SETTINGS_DOCUMENT_PARKING).addSnapshotListener { snapshot, error ->
             if (error != null) {
                 close(error)
                 return@addSnapshotListener
             }
-            val totalQty =
-                snapshot?.documents?.mapNotNull { it.toObject(ParkingConfig::class.java)?.qty }
-                    ?.sum()
-            trySend(totalQty)
+            val parkingConfig = snapshot?.toObject(ParkingConfig::class.java)
+            parkingConfig?.let { trySend(it) }
         }
         awaitClose { listener.remove() }
     }
